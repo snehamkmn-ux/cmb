@@ -1,5 +1,3 @@
-# cmb
-it is a funny website
 import streamlit as st
 import cv2
 import numpy as np
@@ -9,10 +7,8 @@ from PIL import Image
 import urllib.parse
 import io
 
-# --- PAGE CONFIGURATION ---
 st.set_page_config(page_title="Sarcastic Mirror", page_icon="🙄", layout="centered")
 
-# --- SARCASTIC DICTIONARIES ---
 emotion_compliments = {
     "happy": ["Oh look, someone's in a good mood. Suspicious. 🤔", "Smiling like you know a secret. ✨"],
     "angry": ["Whoa, who stole your coffee? ☕", "Looking ready to fight a Wi-Fi router. 💥"],
@@ -22,7 +18,6 @@ emotion_compliments = {
     "default": ["Well, that's certainly a face. 🚀", "My AI circuits are struggling to comprehend this. ✨"]
 }
 
-# 🔴 NEW: BREAKING NEWS HEADLINES
 news_headlines = {
     "happy": "LOCAL RESIDENT ARRESTED FOR BEING TOO CHEERFUL BEFORE 10 AM",
     "angry": "AREA CITIZEN READY TO THROW HANDS WITH A PRINTER",
@@ -32,7 +27,6 @@ news_headlines = {
     "default": "UNIDENTIFIED ANOMALY DETECTED IN LOCAL AREA"
 }
 
-# --- WEBSITE UI ---
 st.title("📺 Confidence Mirror Booster")
 st.write("Step right up and become today's biggest (and dumbest) headline.")
 
@@ -48,23 +42,17 @@ if user_name:
             image = Image.open(camera_photo)
             img_array = np.array(image)
             img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
-
-            # Emotion Analysis
             try:
                 analysis = DeepFace.analyze(img_bgr, actions=['emotion'], enforce_detection=False)
                 current_emotion = analysis[0]['dominant_emotion']
             except:
                 current_emotion = "default"
-
-            # Randomize stats
             confidence_score = random.randint(10, 100) 
             final_compliment = random.choice(emotion_compliments.get(current_emotion, emotion_compliments["default"]))
             headline = news_headlines.get(current_emotion, news_headlines["default"])
-
-        # --- DISPLAY RESULTS ---
+            
         st.success("Broadcast Live! 📡")
         
-        # 🔴 NEW: THE NEWS BROADCAST UI
         st.markdown(f"""
         <div style="background-color: #8B0000; padding: 10px; border-radius: 5px 5px 0 0; text-align: center; color: white;">
             <h2 style="margin: 0; font-family: 'Arial Black', sans-serif; text-transform: uppercase;">🚨 BREAKING NEWS 🚨</h2>
@@ -87,7 +75,6 @@ if user_name:
         st.divider()
         st.info(f"**Off-Camera AI Roast:** \"{final_compliment}\"")
 
-        # Save & Share
         buf = io.BytesIO()
         image.save(buf, format="JPEG")
         byte_im = buf.getvalue()
